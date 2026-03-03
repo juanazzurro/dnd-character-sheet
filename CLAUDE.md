@@ -84,11 +84,17 @@ Fonts: Palatino Linotype/Georgia (serif) for headings, Segoe UI/system-ui (sans)
 
 Responsive: sidebar on desktop (md+), bottom tab bar on mobile.
 
-## Git Workflow — Automatic Save to GitHub
+## Git Workflow — Save to GitHub After Each Task
 
-**Every time you modify, create, or delete any file, you MUST immediately commit and push to GitHub.** This is not optional — treat every file change as a trigger to save progress to the remote repository.
+**After completing each task or logical unit of work, commit and push all changes to GitHub.** Don't commit after every single file edit — wait until the task is done and working, then save everything together.
 
-### Process (run after EVERY file change):
+### When to commit:
+
+- After finishing a feature, bug fix, refactor, or any complete task the user requested.
+- After completing a set of related changes that form one coherent update.
+- Before switching to a different task or topic.
+
+### Process:
 
 1. **Run `npm run build`** to verify no TypeScript or build errors. Fix any issues first.
 2. **Stage the changed files by name** (`git add path/to/file`). Avoid `git add .` or `git add -A`.
@@ -97,8 +103,7 @@ Responsive: sidebar on desktop (md+), bottom tab bar on mobile.
 
 ### Rules:
 
-- **No batching** — commit and push after each individual file modification, not at the end of a task.
-- **If multiple files change together as part of one logical edit** (e.g., updating a type and its usage), they can share a single commit, but push right away.
+- **One commit per completed task** — group all related file changes into a single commit.
 - **If the build fails**, fix the issue first, then commit the fix and push.
 - **If working on a feature branch**, use `git push -u origin branch-name` on the first push.
-- **Never leave uncommitted or unpushed changes.** The GitHub repo must always reflect the latest state of the project.
+- **Never leave work unpushed at the end of a conversation.** The GitHub repo must always reflect the latest state of the project.
