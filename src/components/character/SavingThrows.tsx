@@ -49,7 +49,7 @@ export function SavingThrows() {
               />
               <span
                 className="w-8 text-right text-sm font-bold"
-                style={{ color: '#b07820' }}
+                style={{ color: '#d4af37' }}
               >
                 {formatModifier(mod)}
               </span>

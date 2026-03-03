@@ -31,7 +31,7 @@ export function CollapsibleSection({
         <div className="flex items-center gap-2">
           <span className="font-serif font-bold text-sm text-ink">{title}</span>
           {badge !== undefined && (
-            <span className="text-xs bg-parchment-400 text-ink px-1.5 py-0.5 rounded-full font-semibold">
+            <span className="text-xs bg-parchment-400 text-dnd-gold px-1.5 py-0.5 rounded-full font-semibold">
               {badge}
             </span>
           )}

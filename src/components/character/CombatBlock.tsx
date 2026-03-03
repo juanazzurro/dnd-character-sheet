@@ -145,7 +145,7 @@ export function CombatBlock() {
           </div>
         </div>
         <div className="parchment-card p-2 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold text-ink" style={{ color: '#b07820' }}>+{pb}</span>
+          <span className="text-2xl font-bold text-ink" style={{ color: '#d4af37' }}>+{pb}</span>
           <span className="text-[10px] font-bold uppercase tracking-wide text-ink-muted">Bonif. competencia</span>
           <div className="flex items-center gap-1 mt-1">
             <span className="text-[9px] text-ink-muted">Override:</span>
@@ -172,11 +172,11 @@ export function CombatBlock() {
           <div
             className="w-6 h-6 rounded border-2 flex items-center justify-center transition-all duration-150"
             style={{
-              borderColor: char.inspiration ? '#d4af37' : '#cc9230',
+              borderColor: char.inspiration ? '#d4af37' : '#3a3a5a',
               background: char.inspiration ? '#d4af37' : 'transparent',
             }}
           >
-            {char.inspiration && <span className="block w-3 h-3 rounded-sm bg-ink" />}
+            {char.inspiration && <span className="block w-3 h-3 rounded-sm bg-parchment-50" />}
           </div>
           <span className="text-sm font-semibold text-ink">Inspiración</span>
         </button>

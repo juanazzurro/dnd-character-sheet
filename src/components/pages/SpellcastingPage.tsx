@@ -82,7 +82,7 @@ export function SpellcastingPage() {
             </select>
           </div>
           <div className="flex flex-col items-center parchment-card p-2 text-center">
-            <span className="text-2xl font-bold text-ink mb-1" style={{ color: '#b07820' }}>{dc}</span>
+            <span className="text-2xl font-bold text-ink mb-1" style={{ color: '#d4af37' }}>{dc}</span>
             <span className="text-[10px] font-bold uppercase tracking-wide text-ink-muted">CD Conjuro</span>
             <div className="flex items-center gap-1 mt-1">
               <span className="text-[9px] text-ink-muted">Override:</span>
@@ -96,7 +96,7 @@ export function SpellcastingPage() {
             </div>
           </div>
           <div className="flex flex-col items-center parchment-card p-2 text-center">
-            <span className="text-2xl font-bold mb-1" style={{ color: '#b07820' }}>{formatModifier(atk)}</span>
+            <span className="text-2xl font-bold mb-1" style={{ color: '#d4af37' }}>{formatModifier(atk)}</span>
             <span className="text-[10px] font-bold uppercase tracking-wide text-ink-muted">Bonif. de ataque</span>
             <div className="flex items-center gap-1 mt-1">
               <span className="text-[9px] text-ink-muted">Override:</span>

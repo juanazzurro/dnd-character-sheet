@@ -71,8 +71,8 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
         className="hidden md:flex flex-col h-full transition-all duration-200 no-print"
         style={{
           width: expanded ? '200px' : '60px',
-          background: '#f9efdc',
-          borderRight: '1px solid #e8c78a',
+          background: '#16213e',
+          borderRight: '1px solid #2a2a4a',
           minHeight: '100vh',
           flexShrink: 0,
         }}
@@ -178,7 +178,7 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
               >
                 <div
                   className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                  style={{ background: '#8b0000', color: '#f9efdc' }}
+                  style={{ background: '#8b0000', color: '#f0e6d0' }}
                 >
                   {(char.name || '?')[0].toUpperCase()}
                 </div>
@@ -217,7 +217,7 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
       {/* Mobile bottom tab bar */}
       <nav
         className="md:hidden fixed bottom-0 left-0 right-0 flex border-t border-parchment-300 z-50 no-print"
-        style={{ background: '#f9efdc' }}
+        style={{ background: '#16213e' }}
       >
         {TABS.map((tab) => (
           <button

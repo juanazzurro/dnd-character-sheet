@@ -68,7 +68,7 @@ export function SkillsList() {
               />
               <span
                 className="w-7 text-right text-xs font-bold"
-                style={{ color: '#b07820' }}
+                style={{ color: '#d4af37' }}
               >
                 {formatModifier(mod)}
               </span>
@@ -82,7 +82,7 @@ export function SkillsList() {
       </div>
       <div className="mt-2 pt-2 border-t border-parchment-300 flex items-center gap-2">
         <span className="text-xs text-ink-muted">Percepción pasiva</span>
-        <span className="font-bold text-sm" style={{ color: '#b07820' }}>{passive}</span>
+        <span className="font-bold text-sm" style={{ color: '#d4af37' }}>{passive}</span>
       </div>
     </div>
   );

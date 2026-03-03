@@ -19,7 +19,7 @@ export function ProficiencyToggle({ proficient, onToggle, ariaLabel }: Proficien
             width: '6px',
             height: '6px',
             borderRadius: '50%',
-            backgroundColor: '#2c1810',
+            backgroundColor: '#0f0f1a',
             display: 'block',
           }}
         />

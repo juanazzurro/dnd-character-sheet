@@ -19,12 +19,12 @@ function App() {
     return (
       <div
         className="min-h-screen flex flex-col items-center justify-center"
-        style={{ background: '#fdf8f0' }}
+        style={{ background: '#0f0f1a' }}
       >
         <div className="text-center max-w-md px-6">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 font-serif font-bold text-3xl"
-            style={{ background: '#8b0000', color: '#f9efdc' }}
+            style={{ background: '#8b0000', color: '#f0e6d0' }}
           >
             d20
           </div>
@@ -57,7 +57,7 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden" style={{ background: '#fdf8f0' }}>
+    <div className="flex h-screen overflow-hidden" style={{ background: '#0f0f1a' }}>
       <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
       <main key={activeCharacterId ?? 'none'} className="flex-1 overflow-y-auto pb-16 md:pb-0">
         {renderPage()}

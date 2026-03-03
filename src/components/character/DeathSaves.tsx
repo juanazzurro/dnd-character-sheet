@@ -27,7 +27,7 @@ export function DeathSaves() {
       <div className="space-y-2">
         {/* Successes */}
         <div className="flex items-center gap-2">
-          <Heart size={14} className="text-green-700 flex-shrink-0" />
+          <Heart size={14} className="text-green-500 flex-shrink-0" />
           <span className="text-xs text-ink-muted w-14">Éxitos</span>
           <div className="flex gap-2">
             {activeCharacter.deathSaveSuccesses.map((val, i) => (
@@ -37,8 +37,8 @@ export function DeathSaves() {
                 aria-label={`Éxito de muerte ${i + 1}`}
                 className="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-150"
                 style={{
-                  borderColor: val ? '#16a34a' : '#cc9230',
-                  background: val ? '#16a34a' : 'transparent',
+                  borderColor: val ? '#22c55e' : '#3a3a5a',
+                  background: val ? '#22c55e' : 'transparent',
                 }}
               >
                 {val && <span className="block w-2.5 h-2.5 rounded-full bg-white" />}
@@ -59,7 +59,7 @@ export function DeathSaves() {
                 aria-label={`Fracaso de muerte ${i + 1}`}
                 className="w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-150"
                 style={{
-                  borderColor: val ? '#8b0000' : '#cc9230',
+                  borderColor: val ? '#8b0000' : '#3a3a5a',
                   background: val ? '#8b0000' : 'transparent',
                 }}
               >
