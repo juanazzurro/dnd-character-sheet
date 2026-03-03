@@ -1,4 +1,5 @@
 import type { Character } from '../types/character';
+import { createDefaultCharacter } from '../types/character';
 
 export function exportCharacter(character: Character): void {
   const json = JSON.stringify(character, null, 2);
@@ -32,8 +33,8 @@ export function importCharacter(file: File): Promise<Character> {
           return;
         }
 
-        // Ensure id is fresh if it conflicts
-        const character = parsed as Character;
+        // Merge with defaults to fill missing fields
+        const character = { ...createDefaultCharacter(), ...parsed, id: parsed.id } as Character;
         resolve(character);
       } catch {
         reject(new Error('Error al leer el archivo JSON'));

@@ -3,7 +3,7 @@ import { useCharacterStore } from '../../store/characterStore';
 const COINS = [
   { key: 'cp', label: 'PC', color: '#b87333', tooltip: 'Piezas de cobre' },
   { key: 'ep', label: 'PE', color: '#aaa9ad', tooltip: 'Piezas de electrum' },
-  { key: 'sp', label: 'PP', color: '#c0c0c0', tooltip: 'Piezas de plata' },
+  { key: 'sp', label: 'PL', color: '#c0c0c0', tooltip: 'Piezas de plata' },
   { key: 'gp', label: 'PO', color: '#d4af37', tooltip: 'Piezas de oro' },
   { key: 'pp', label: 'PPt', color: '#e5e4e2', tooltip: 'Piezas de platino' },
 ] as const;

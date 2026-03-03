@@ -25,15 +25,6 @@ interface CharacterStore {
   setSaveStatus: (status: SaveStatus) => void;
 }
 
-let saveTimeout: ReturnType<typeof setTimeout> | null = null;
-
-function scheduleSave(characters: Character[]) {
-  if (saveTimeout) clearTimeout(saveTimeout);
-  saveTimeout = setTimeout(() => {
-    saveCharacters(characters);
-  }, 2000);
-}
-
 const initialCharacters = loadCharacters();
 const initialActiveId = loadActiveCharacterId();
 const resolvedActiveId =
@@ -56,9 +47,8 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
     const newChar = createDefaultCharacter();
     set((state) => {
       const characters = [...state.characters, newChar];
-      scheduleSave(characters);
       saveActiveCharacterId(newChar.id);
-      return { characters, activeCharacterId: newChar.id, activeCharacter: newChar, saveStatus: 'saving' };
+      return { characters, activeCharacterId: newChar.id, activeCharacter: newChar, saveStatus: 'unsaved' };
     });
   },
 
@@ -68,8 +58,7 @@ export const useCharacterStore = create<CharacterStore>((set) => ({
         c.id === id ? { ...c, ...updates, updatedAt: Date.now() } : c
       );
       const activeCharacter = characters.find((c) => c.id === state.activeCharacterId) ?? null;
-      scheduleSave(characters);
-      return { characters, activeCharacter, saveStatus: 'saving' };
+      return { characters, activeCharacter, saveStatus: 'unsaved' };
     });
   },
 

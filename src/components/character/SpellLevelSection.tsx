@@ -49,7 +49,10 @@ export function SpellLevelSectionComponent({ level, spellLevel }: SpellLevelSect
       <input
         type="number"
         value={spellLevel.total}
-        onChange={(e) => updateLevel({ total: Number(e.target.value) })}
+        onChange={(e) => {
+          const n = Math.max(0, Number(e.target.value));
+          updateLevel({ total: n, expended: Math.min(spellLevel.expended, n) });
+        }}
         className="w-8 text-center parchment-input text-xs"
         min={0}
         max={9}

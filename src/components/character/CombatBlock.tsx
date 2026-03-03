@@ -145,7 +145,7 @@ export function CombatBlock() {
           </div>
         </div>
         <div className="parchment-card p-2 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold text-ink" style={{ color: '#d4af37' }}>+{pb}</span>
+          <span className="text-2xl font-bold text-ink" style={{ color: '#d4af37' }}>{formatModifier(pb)}</span>
           <span className="text-[10px] font-bold uppercase tracking-wide text-ink-muted">Bonif. competencia</span>
           <div className="flex items-center gap-1 mt-1">
             <span className="text-[9px] text-ink-muted">Override:</span>

@@ -1,4 +1,5 @@
 import type { Character } from '../types/character';
+import { createDefaultCharacter } from '../types/character';
 
 const STORAGE_KEY = 'dnd5e_characters';
 const ACTIVE_KEY = 'dnd5e_active_character';
@@ -9,7 +10,9 @@ export function loadCharacters(): Character[] {
     if (!raw) return [];
     const parsed = JSON.parse(raw);
     if (!Array.isArray(parsed)) return [];
-    return parsed as Character[];
+    return parsed
+      .filter((item: unknown) => item && typeof item === 'object')
+      .map((item: unknown) => ({ ...createDefaultCharacter(), ...(item as Partial<Character>) }));
   } catch {
     return [];
   }
@@ -25,7 +28,11 @@ export function saveCharacters(chars: Character[]): void {
 }
 
 export function loadActiveCharacterId(): string | null {
-  return localStorage.getItem(ACTIVE_KEY);
+  try {
+    return localStorage.getItem(ACTIVE_KEY);
+  } catch {
+    return null;
+  }
 }
 
 export function saveActiveCharacterId(id: string | null): void {

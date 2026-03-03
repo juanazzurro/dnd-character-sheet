@@ -15,7 +15,9 @@ export function AttackTable() {
   const attacks = activeCharacter.attacks;
   // Ensure minimum 3 visible rows
   const displayAttacks = attacks.length < 3
-    ? [...attacks, ...Array.from({ length: 3 - attacks.length }, newAttack)]
+    ? [...attacks, ...Array.from({ length: 3 - attacks.length }, (_, i) => ({
+        id: `phantom-${i}`, name: '', bonus: '', damageType: ''
+      }))]
     : attacks;
 
   function updateAttack(id: string, field: keyof Attack, value: string) {

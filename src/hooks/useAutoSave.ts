@@ -26,7 +26,7 @@ export function useAutoSave() {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [characters]);
+  }, [characters, setSaveStatus]);
 
   return saveStatus;
 }
