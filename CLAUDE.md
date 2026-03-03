@@ -84,15 +84,21 @@ Fonts: Palatino Linotype/Georgia (serif) for headings, Segoe UI/system-ui (sans)
 
 Responsive: sidebar on desktop (md+), bottom tab bar on mobile.
 
-## Git Workflow
+## Git Workflow — Automatic Save to GitHub
 
-Commit and push progress frequently as you work. Follow this order:
+**Every time you modify, create, or delete any file, you MUST immediately commit and push to GitHub.** This is not optional — treat every file change as a trigger to save progress to the remote repository.
 
-1. **After each meaningful change** (new feature, bug fix, refactor, style update), stage and commit immediately — don't batch unrelated changes together.
-2. **Run `npm run build`** before committing to catch TypeScript or build errors. Fix any issues before proceeding.
-3. **Stage only the relevant files** by name (`git add src/components/Foo.tsx src/utils/bar.ts`). Avoid `git add .` or `git add -A`.
-4. **Write a concise commit message** describing the "why", not just the "what" (e.g., "Add death save toggles to combat block" not "Update CombatBlock.tsx").
-5. **Push to the remote** (`git push`) after each commit to keep the GitHub repository up to date.
-6. **If working on a feature branch**, push with `-u` on the first push (`git push -u origin branch-name`).
+### Process (run after EVERY file change):
 
-In short: **code → build check → stage → commit → push**, repeat for every logical unit of work.
+1. **Run `npm run build`** to verify no TypeScript or build errors. Fix any issues first.
+2. **Stage the changed files by name** (`git add path/to/file`). Avoid `git add .` or `git add -A`.
+3. **Commit with a concise message** describing the change (e.g., "Add death save toggles to combat block").
+4. **Push immediately** (`git push`).
+
+### Rules:
+
+- **No batching** — commit and push after each individual file modification, not at the end of a task.
+- **If multiple files change together as part of one logical edit** (e.g., updating a type and its usage), they can share a single commit, but push right away.
+- **If the build fails**, fix the issue first, then commit the fix and push.
+- **If working on a feature branch**, use `git push -u origin branch-name` on the first push.
+- **Never leave uncommitted or unpushed changes.** The GitHub repo must always reflect the latest state of the project.
