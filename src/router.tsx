@@ -1,8 +1,11 @@
 import { createHashRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { PersonajesSection } from './components/sections/PersonajesSection';
+import { NpcsSection } from './components/sections/NpcsSection';
+import { NpcListView } from './components/npc/NpcListView';
+import { NpcDetailView } from './components/npc/NpcDetailView';
 import { PlaceholderPage } from './components/pages/PlaceholderPage';
-import { Skull, Map, Crown, Scroll } from 'lucide-react';
+import { Map, Crown, Scroll } from 'lucide-react';
 
 export const router = createHashRouter([
   {
@@ -13,7 +16,11 @@ export const router = createHashRouter([
       { path: 'personajes', element: <PersonajesSection /> },
       {
         path: 'npcs',
-        element: <PlaceholderPage title="NPCs" icon={<Skull size={32} />} />,
+        element: <NpcsSection />,
+        children: [
+          { index: true, element: <NpcListView /> },
+          { path: ':id', element: <NpcDetailView /> },
+        ],
       },
       {
         path: 'mapa',

@@ -116,3 +116,56 @@ export function getSpellAttackBonus(char: Character): number {
   const pb = char.proficiencyBonusOverride ?? getProficiencyBonus(char.level);
   return pb + getSpellcastingAbilityMod(char);
 }
+
+// CR → XP table (D&D 5E)
+export const CR_XP_TABLE: Record<number, number> = {
+  0: 10,
+  0.125: 25,
+  0.25: 50,
+  0.5: 100,
+  1: 200,
+  2: 450,
+  3: 700,
+  4: 1100,
+  5: 1800,
+  6: 2300,
+  7: 2900,
+  8: 3900,
+  9: 5000,
+  10: 5900,
+  11: 7200,
+  12: 8400,
+  13: 10000,
+  14: 11500,
+  15: 13000,
+  16: 15000,
+  17: 18000,
+  18: 20000,
+  19: 22000,
+  20: 25000,
+  21: 33000,
+  22: 41000,
+  23: 50000,
+  24: 62000,
+  25: 75000,
+  26: 90000,
+  27: 105000,
+  28: 120000,
+  29: 135000,
+  30: 155000,
+};
+
+export function getXpFromCR(cr: number): number {
+  return CR_XP_TABLE[cr] ?? 0;
+}
+
+export function getProficiencyBonusFromCR(cr: number): number {
+  if (cr <= 4) return 2;
+  if (cr <= 8) return 3;
+  if (cr <= 12) return 4;
+  if (cr <= 16) return 5;
+  if (cr <= 20) return 6;
+  if (cr <= 24) return 7;
+  if (cr <= 28) return 8;
+  return 9;
+}
