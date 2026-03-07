@@ -4,8 +4,12 @@ import { PersonajesSection } from './components/sections/PersonajesSection';
 import { NpcsSection } from './components/sections/NpcsSection';
 import { NpcListView } from './components/npc/NpcListView';
 import { NpcDetailView } from './components/npc/NpcDetailView';
+import { MainQuestsSection } from './components/sections/MainQuestsSection';
+import { SideQuestsSection } from './components/sections/SideQuestsSection';
+import { QuestListView } from './components/quest/QuestListView';
+import { QuestDetailView } from './components/quest/QuestDetailView';
 import { PlaceholderPage } from './components/pages/PlaceholderPage';
-import { Map, Crown, Scroll } from 'lucide-react';
+import { Map } from 'lucide-react';
 
 export const router = createHashRouter([
   {
@@ -28,11 +32,19 @@ export const router = createHashRouter([
       },
       {
         path: 'misiones-principales',
-        element: <PlaceholderPage title="Misiones Principales" icon={<Crown size={32} />} />,
+        element: <MainQuestsSection />,
+        children: [
+          { index: true, element: <QuestListView questType="principal" /> },
+          { path: ':id', element: <QuestDetailView questType="principal" /> },
+        ],
       },
       {
         path: 'misiones-secundarias',
-        element: <PlaceholderPage title="Misiones Secundarias" icon={<Scroll size={32} />} />,
+        element: <SideQuestsSection />,
+        children: [
+          { index: true, element: <QuestListView questType="secundaria" /> },
+          { path: ':id', element: <QuestDetailView questType="secundaria" /> },
+        ],
       },
     ],
   },
