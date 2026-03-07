@@ -8,8 +8,9 @@ import { MainQuestsSection } from './components/sections/MainQuestsSection';
 import { SideQuestsSection } from './components/sections/SideQuestsSection';
 import { QuestListView } from './components/quest/QuestListView';
 import { QuestDetailView } from './components/quest/QuestDetailView';
-import { PlaceholderPage } from './components/pages/PlaceholderPage';
-import { Map } from 'lucide-react';
+import { MapSection } from './components/sections/MapSection';
+import { MapListView } from './components/map/MapListView';
+import { MapDetailView } from './components/map/MapDetailView';
 
 export const router = createHashRouter([
   {
@@ -28,7 +29,11 @@ export const router = createHashRouter([
       },
       {
         path: 'mapa',
-        element: <PlaceholderPage title="Mapa" icon={<Map size={32} />} />,
+        element: <MapSection />,
+        children: [
+          { index: true, element: <MapListView /> },
+          { path: ':id', element: <MapDetailView /> },
+        ],
       },
       {
         path: 'misiones-principales',
