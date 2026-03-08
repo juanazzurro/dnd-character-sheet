@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download } from 'lucide-react';
 import { useNpcStore } from '../../store/npcStore';
+import { useMainQuestStore, useSideQuestStore } from '../../store/questStore';
 import { exportNpc } from '../../utils/npcImportExport';
 import {
   getAbilityModifier,
@@ -19,6 +20,7 @@ import { StatBlock } from '../common/StatBlock';
 import { ProficiencyToggle } from '../common/ProficiencyToggle';
 import { ImageUpload } from '../common/ImageUpload';
 import { EditableField } from '../common/EditableField';
+import { CrossReferenceChips } from '../common/CrossReferenceChips';
 import { NpcActionList } from './NpcActionList';
 import type { Npc, NpcAction } from '../../types/npc';
 
@@ -361,7 +363,54 @@ export function NpcDetailView() {
             <EditableField value={npc.relationshipNotes} onChange={(v) => update({ relationshipNotes: v as string })} multiline placeholder="Notas sobre la relacion con el grupo..." label="Notas de Relacion" />
           </div>
         </CollapsibleSection>
+
+        {/* Connections */}
+        <NpcConnectionsSection npcName={npc.name} />
       </div>
     </PageContainer>
+  );
+}
+
+function NpcConnectionsSection({ npcName }: { npcName: string }) {
+  const mainQuests = useMainQuestStore((s) => s.quests);
+  const sideQuests = useSideQuestStore((s) => s.quests);
+
+  const relatedQuests = useMemo(() => {
+    if (!npcName) return [];
+    const nameLower = npcName.toLowerCase();
+    const results: { name: string; route: string }[] = [];
+
+    for (const q of mainQuests) {
+      if (
+        q.questGiver.toLowerCase().includes(nameLower) ||
+        q.relatedNpcs.toLowerCase().includes(nameLower)
+      ) {
+        results.push({ name: q.title || 'Sin titulo', route: `/misiones-principales/${q.id}` });
+      }
+    }
+    for (const q of sideQuests) {
+      if (
+        q.questGiver.toLowerCase().includes(nameLower) ||
+        q.relatedNpcs.toLowerCase().includes(nameLower)
+      ) {
+        results.push({ name: q.title || 'Sin titulo', route: `/misiones-secundarias/${q.id}` });
+      }
+    }
+    return results;
+  }, [npcName, mainQuests, sideQuests]);
+
+  const chipValue = relatedQuests.map((q) => q.name).join(', ');
+
+  return (
+    <CollapsibleSection title="Conexiones">
+      <div className="space-y-1">
+        <div className="section-header">Misiones Relacionadas</div>
+        <CrossReferenceChips
+          value={chipValue}
+          entities={relatedQuests}
+          emptyText="Este NPC no esta referenciado en ninguna mision."
+        />
+      </div>
+    </CollapsibleSection>
   );
 }

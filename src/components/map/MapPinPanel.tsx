@@ -3,15 +3,19 @@ import type { MapPin } from '../../types/gameMap';
 import { PIN_TYPES, PIN_STATUSES } from '../../types/gameMap';
 import type { PinType, PinStatus } from '../../types/gameMap';
 import { EditableField } from '../common/EditableField';
+import { AutocompleteField, type Suggestion } from '../common/AutocompleteField';
+import { CrossReferenceChips } from '../common/CrossReferenceChips';
 
 interface MapPinPanelProps {
   pin: MapPin;
   onUpdate: (updates: Partial<MapPin>) => void;
   onDelete: () => void;
   onClose: () => void;
+  npcSuggestions: Suggestion[];
+  questSuggestions: Suggestion[];
 }
 
-export function MapPinPanel({ pin, onUpdate, onDelete, onClose }: MapPinPanelProps) {
+export function MapPinPanel({ pin, onUpdate, onDelete, onClose, npcSuggestions, questSuggestions }: MapPinPanelProps) {
   function handleDelete() {
     if (window.confirm(`¿Eliminar el pin "${pin.name || 'Sin nombre'}"?`)) {
       onDelete();
@@ -74,22 +78,32 @@ export function MapPinPanel({ pin, onUpdate, onDelete, onClose }: MapPinPanelPro
           rows={3}
         />
 
-        <EditableField
+        <AutocompleteField
           value={pin.relatedNpcs}
-          onChange={(v) => onUpdate({ relatedNpcs: String(v) })}
+          onChange={(v) => onUpdate({ relatedNpcs: v })}
+          suggestions={npcSuggestions}
           placeholder="NPCs relacionados..."
           label="NPCs Relacionados"
           multiline
           rows={2}
         />
+        <CrossReferenceChips
+          value={pin.relatedNpcs}
+          entities={npcSuggestions.map((s) => ({ name: s.name, route: s.route }))}
+        />
 
-        <EditableField
+        <AutocompleteField
           value={pin.relatedQuests}
-          onChange={(v) => onUpdate({ relatedQuests: String(v) })}
+          onChange={(v) => onUpdate({ relatedQuests: v })}
+          suggestions={questSuggestions}
           placeholder="Misiones relacionadas..."
           label="Misiones Relacionadas"
           multiline
           rows={2}
+        />
+        <CrossReferenceChips
+          value={pin.relatedQuests}
+          entities={questSuggestions.map((s) => ({ name: s.name, route: s.route }))}
         />
 
         <EditableField

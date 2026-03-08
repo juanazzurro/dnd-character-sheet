@@ -1,7 +1,9 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Tag, Plus, Minus, RotateCcw, MapPin as MapPinIcon, X } from 'lucide-react';
 import { useMapStore } from '../../store/mapStore';
+import { useNpcStore } from '../../store/npcStore';
+import { useMainQuestStore, useSideQuestStore } from '../../store/questStore';
 import { exportMap } from '../../utils/mapImportExport';
 import { createDefaultMapPin } from '../../types/gameMap';
 import { PIN_TYPES } from '../../types/gameMap';
@@ -22,6 +24,20 @@ export function MapDetailView() {
   const updatePin = useMapStore((s) => s.updatePin);
   const deletePin = useMapStore((s) => s.deletePin);
   const movePin = useMapStore((s) => s.movePin);
+
+  const npcs = useNpcStore((s) => s.npcs);
+  const mainQuests = useMainQuestStore((s) => s.quests);
+  const sideQuests = useSideQuestStore((s) => s.quests);
+
+  const npcSuggestions = useMemo(() =>
+    npcs.filter((n) => n.name).map((n) => ({ id: n.id, name: n.name, route: `/npcs/${n.id}` })),
+    [npcs]
+  );
+
+  const questSuggestions = useMemo(() => [
+    ...mainQuests.filter((q) => q.title).map((q) => ({ id: q.id, name: q.title, route: `/misiones-principales/${q.id}` })),
+    ...sideQuests.filter((q) => q.title).map((q) => ({ id: q.id, name: q.title, route: `/misiones-secundarias/${q.id}` })),
+  ], [mainQuests, sideQuests]);
 
   const map = maps.find((m) => m.id === id);
 
@@ -294,6 +310,8 @@ export function MapDetailView() {
               setSelectedPinId(null);
             }}
             onClose={() => setSelectedPinId(null)}
+            npcSuggestions={npcSuggestions}
+            questSuggestions={questSuggestions}
           />
         )}
       </div>

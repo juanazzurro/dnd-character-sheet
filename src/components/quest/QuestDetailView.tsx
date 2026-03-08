@@ -2,9 +2,13 @@ import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download } from 'lucide-react';
 import { exportQuest } from '../../utils/questImportExport';
+import { useNpcStore } from '../../store/npcStore';
+import { useMainQuestStore, useSideQuestStore } from '../../store/questStore';
 import { PageContainer } from '../layout/PageContainer';
 import { CollapsibleSection } from '../common/CollapsibleSection';
 import { EditableField } from '../common/EditableField';
+import { AutocompleteField } from '../common/AutocompleteField';
+import { CrossReferenceChips } from '../common/CrossReferenceChips';
 import { QuestObjectiveList } from './QuestObjectiveList';
 import { SessionLogList } from './SessionLogList';
 import { QUEST_CONFIG } from './questConfig';
@@ -160,29 +164,7 @@ export function QuestDetailView({ questType }: QuestDetailViewProps) {
 
         {/* Connections */}
         <CollapsibleSection title="Conexiones">
-          <div className="space-y-2">
-            <EditableField
-              value={quest.relatedNpcs}
-              onChange={(v) => update({ relatedNpcs: v as string })}
-              multiline
-              placeholder="NPCs relacionados..."
-              label="NPCs Relacionados"
-            />
-            <EditableField
-              value={quest.relatedQuests}
-              onChange={(v) => update({ relatedQuests: v as string })}
-              multiline
-              placeholder="Misiones relacionadas..."
-              label="Misiones Relacionadas"
-            />
-            <EditableField
-              value={quest.relatedLocations}
-              onChange={(v) => update({ relatedLocations: v as string })}
-              multiline
-              placeholder="Ubicaciones relacionadas..."
-              label="Ubicaciones Relacionadas"
-            />
-          </div>
+          <ConnectionsSection quest={quest} onUpdate={update} />
         </CollapsibleSection>
 
         {/* DM Notes */}
@@ -197,5 +179,70 @@ export function QuestDetailView({ questType }: QuestDetailViewProps) {
         </CollapsibleSection>
       </div>
     </PageContainer>
+  );
+}
+
+function ConnectionsSection({
+  quest,
+  onUpdate,
+}: {
+  quest: Quest;
+  onUpdate: (updates: Partial<Quest>) => void;
+}) {
+  const npcs = useNpcStore((s) => s.npcs);
+  const mainQuests = useMainQuestStore((s) => s.quests);
+  const sideQuests = useSideQuestStore((s) => s.quests);
+
+  const npcSuggestions = npcs
+    .filter((n) => n.name)
+    .map((n) => ({ id: n.id, name: n.name, route: `/npcs/${n.id}` }));
+
+  const npcEntities = npcSuggestions.map((s) => ({ name: s.name, route: s.route }));
+
+  const questSuggestions = [
+    ...mainQuests.filter((q) => q.id !== quest.id && q.title).map((q) => ({
+      id: q.id,
+      name: q.title,
+      route: `/misiones-principales/${q.id}`,
+    })),
+    ...sideQuests.filter((q) => q.id !== quest.id && q.title).map((q) => ({
+      id: q.id,
+      name: q.title,
+      route: `/misiones-secundarias/${q.id}`,
+    })),
+  ];
+
+  const questEntities = questSuggestions.map((s) => ({ name: s.name, route: s.route }));
+
+  return (
+    <div className="space-y-2">
+      <AutocompleteField
+        value={quest.relatedNpcs}
+        onChange={(v) => onUpdate({ relatedNpcs: v })}
+        suggestions={npcSuggestions}
+        multiline
+        placeholder="NPCs relacionados..."
+        label="NPCs Relacionados"
+      />
+      <CrossReferenceChips value={quest.relatedNpcs} entities={npcEntities} />
+
+      <AutocompleteField
+        value={quest.relatedQuests}
+        onChange={(v) => onUpdate({ relatedQuests: v })}
+        suggestions={questSuggestions}
+        multiline
+        placeholder="Misiones relacionadas..."
+        label="Misiones Relacionadas"
+      />
+      <CrossReferenceChips value={quest.relatedQuests} entities={questEntities} />
+
+      <EditableField
+        value={quest.relatedLocations}
+        onChange={(v) => onUpdate({ relatedLocations: v as string })}
+        multiline
+        placeholder="Ubicaciones relacionadas..."
+        label="Ubicaciones Relacionadas"
+      />
+    </div>
   );
 }
