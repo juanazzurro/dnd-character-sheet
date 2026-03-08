@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Download, Tag, Plus, Minus, RotateCcw, MapPin as MapPinIcon, X } from 'lucide-react';
 import { useMapStore } from '../../store/mapStore';
@@ -10,6 +10,8 @@ import { PIN_TYPES } from '../../types/gameMap';
 import { MapImageUpload } from './MapImageUpload';
 import { MapPinMarker } from './MapPinMarker';
 import { MapPinPanel } from './MapPinPanel';
+import type { GameMap } from '../../types/gameMap';
+import type { Suggestion } from '../common/AutocompleteField';
 
 function clamp(val: number, min: number, max: number) {
   return Math.max(min, Math.min(max, val));
@@ -17,13 +19,8 @@ function clamp(val: number, min: number, max: number) {
 
 export function MapDetailView() {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const maps = useMapStore((s) => s.maps);
-  const updateMap = useMapStore((s) => s.updateMap);
-  const addPin = useMapStore((s) => s.addPin);
-  const updatePin = useMapStore((s) => s.updatePin);
-  const deletePin = useMapStore((s) => s.deletePin);
-  const movePin = useMapStore((s) => s.movePin);
+  const map = maps.find((m) => m.id === id);
 
   const npcs = useNpcStore((s) => s.npcs);
   const mainQuests = useMainQuestStore((s) => s.quests);
@@ -39,9 +36,40 @@ export function MapDetailView() {
     ...sideQuests.filter((q) => q.title).map((q) => ({ id: q.id, name: q.title, route: `/misiones-secundarias/${q.id}` })),
   ], [mainQuests, sideQuests]);
 
-  const map = maps.find((m) => m.id === id);
+  if (!map) {
+    return (
+      <div className="flex-1 flex items-center justify-center" style={{ background: '#0f0f1a' }}>
+        <p className="text-ink-muted">Mapa no encontrado</p>
+      </div>
+    );
+  }
 
-  // Canvas state
+  // key={map.id} forces remount when switching maps, resetting all canvas state
+  return (
+    <MapDetailViewInner
+      key={map.id}
+      map={map}
+      npcSuggestions={npcSuggestions}
+      questSuggestions={questSuggestions}
+    />
+  );
+}
+
+interface MapDetailViewInnerProps {
+  map: GameMap;
+  npcSuggestions: Suggestion[];
+  questSuggestions: Suggestion[];
+}
+
+function MapDetailViewInner({ map, npcSuggestions, questSuggestions }: MapDetailViewInnerProps) {
+  const navigate = useNavigate();
+  const updateMap = useMapStore((s) => s.updateMap);
+  const addPin = useMapStore((s) => s.addPin);
+  const updatePin = useMapStore((s) => s.updatePin);
+  const deletePin = useMapStore((s) => s.deletePin);
+  const movePin = useMapStore((s) => s.movePin);
+
+  // Canvas state — all reset naturally on remount via key={map.id}
   const [scale, setScale] = useState(1);
   const [translateX, setTranslateX] = useState(0);
   const [translateY, setTranslateY] = useState(0);
@@ -56,15 +84,6 @@ export function MapDetailView() {
 
   const viewportRef = useRef<HTMLDivElement>(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
-
-  // Reset view when map changes
-  useEffect(() => {
-    setScale(1);
-    setTranslateX(0);
-    setTranslateY(0);
-    setSelectedPinId(null);
-    setPlacingPin(false);
-  }, [id]);
 
   const handleWheel = useCallback((e: React.WheelEvent) => {
     e.preventDefault();
@@ -90,7 +109,7 @@ export function MapDetailView() {
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if (e.button !== 0) return;
 
-    if (placingPin && map && imageSize) {
+    if (placingPin && imageSize) {
       const viewport = viewportRef.current;
       if (!viewport) return;
       const rect = viewport.getBoundingClientRect();
@@ -109,10 +128,10 @@ export function MapDetailView() {
 
     setIsPanning(true);
     setPanStart({ x: e.clientX - translateX, y: e.clientY - translateY });
-  }, [placingPin, map, imageSize, translateX, translateY, scale, addPin]);
+  }, [placingPin, map.id, imageSize, translateX, translateY, scale, addPin]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (draggingPinId && map && imageSize) {
+    if (draggingPinId && imageSize) {
       const viewport = viewportRef.current;
       if (!viewport) return;
       const rect = viewport.getBoundingClientRect();
@@ -129,7 +148,7 @@ export function MapDetailView() {
     if (!isPanning) return;
     setTranslateX(e.clientX - panStart.x);
     setTranslateY(e.clientY - panStart.y);
-  }, [draggingPinId, isPanning, panStart, map, imageSize, translateX, translateY, scale, movePin]);
+  }, [draggingPinId, isPanning, panStart, map.id, imageSize, translateX, translateY, scale, movePin]);
 
   const handleMouseUp = useCallback(() => {
     setIsPanning(false);
@@ -175,14 +194,6 @@ export function MapDetailView() {
   function handleImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const img = e.currentTarget;
     setImageSize({ width: img.naturalWidth, height: img.naturalHeight });
-  }
-
-  if (!map) {
-    return (
-      <div className="flex-1 flex items-center justify-center" style={{ background: '#0f0f1a' }}>
-        <p className="text-ink-muted">Mapa no encontrado</p>
-      </div>
-    );
   }
 
   const selectedPin = selectedPinId ? map.pins.find((p) => p.id === selectedPinId) : null;

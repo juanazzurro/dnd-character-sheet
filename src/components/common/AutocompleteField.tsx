@@ -31,6 +31,11 @@ export function AutocompleteField({
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Sync currentText when value prop changes externally (e.g., store update)
+  useEffect(() => {
+    setCurrentText(value);
+  }, [value]);
+
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -82,13 +87,24 @@ export function AutocompleteField({
     onChange(newValue);
     setShowDropdown(false);
 
-    // Update the input element directly since it's uncontrolled-ish
+    // Focus the input after selection
     if (containerRef.current) {
       const input = containerRef.current.querySelector('input, textarea') as HTMLInputElement | HTMLTextAreaElement | null;
       if (input) {
-        input.value = newValue;
         input.focus();
       }
+    }
+  }
+
+  function checkSuggestions(text: string) {
+    const parts = text.split(',');
+    const currentWord = (parts[parts.length - 1] || '').trim().toLowerCase();
+    if (currentWord.length > 0) {
+      const matches = suggestions.filter(
+        (s) => s.name.toLowerCase().includes(currentWord)
+      ).slice(0, 5);
+      setFiltered(matches);
+      setShowDropdown(matches.length > 0);
     }
   }
 
@@ -99,43 +115,22 @@ export function AutocompleteField({
       {label && <div className="section-header">{label}</div>}
       {multiline ? (
         <textarea
-          defaultValue={value}
+          value={currentText}
           onChange={handleChange}
           placeholder={placeholder}
           rows={rows}
           className={`${baseClass} resize-none leading-relaxed w-full`}
           style={{ borderBottomWidth: '1px' }}
-          onFocus={() => {
-            // Re-check suggestions on focus
-            const parts = currentText.split(',');
-            const currentWord = (parts[parts.length - 1] || '').trim().toLowerCase();
-            if (currentWord.length > 0) {
-              const matches = suggestions.filter(
-                (s) => s.name.toLowerCase().includes(currentWord)
-              ).slice(0, 5);
-              setFiltered(matches);
-              setShowDropdown(matches.length > 0);
-            }
-          }}
+          onFocus={() => checkSuggestions(currentText)}
         />
       ) : (
         <input
           type="text"
-          defaultValue={value}
+          value={currentText}
           onChange={handleChange}
           placeholder={placeholder}
           className={`${baseClass} w-full`}
-          onFocus={() => {
-            const parts = currentText.split(',');
-            const currentWord = (parts[parts.length - 1] || '').trim().toLowerCase();
-            if (currentWord.length > 0) {
-              const matches = suggestions.filter(
-                (s) => s.name.toLowerCase().includes(currentWord)
-              ).slice(0, 5);
-              setFiltered(matches);
-              setShowDropdown(matches.length > 0);
-            }
-          }}
+          onFocus={() => checkSuggestions(currentText)}
         />
       )}
 

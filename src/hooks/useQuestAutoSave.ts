@@ -9,7 +9,6 @@ interface QuestStoreState {
   setSaveStatus: (status: SaveStatus) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type UseStoreHook = <T>(selector: (s: QuestStoreState) => T) => T;
 
 export function useQuestAutoSave(

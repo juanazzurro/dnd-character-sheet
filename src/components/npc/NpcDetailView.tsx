@@ -377,22 +377,21 @@ function NpcConnectionsSection({ npcName }: { npcName: string }) {
 
   const relatedQuests = useMemo(() => {
     if (!npcName) return [];
-    const nameLower = npcName.toLowerCase();
+    const nameLower = npcName.toLowerCase().trim();
     const results: { name: string; route: string }[] = [];
 
+    function hasExactMatch(field: string): boolean {
+      // Match against comma-separated entries exactly, not as substring
+      return field.split(',').some((entry) => entry.trim().toLowerCase() === nameLower);
+    }
+
     for (const q of mainQuests) {
-      if (
-        q.questGiver.toLowerCase().includes(nameLower) ||
-        q.relatedNpcs.toLowerCase().includes(nameLower)
-      ) {
+      if (hasExactMatch(q.questGiver) || hasExactMatch(q.relatedNpcs)) {
         results.push({ name: q.title || 'Sin titulo', route: `/misiones-principales/${q.id}` });
       }
     }
     for (const q of sideQuests) {
-      if (
-        q.questGiver.toLowerCase().includes(nameLower) ||
-        q.relatedNpcs.toLowerCase().includes(nameLower)
-      ) {
+      if (hasExactMatch(q.questGiver) || hasExactMatch(q.relatedNpcs)) {
         results.push({ name: q.title || 'Sin titulo', route: `/misiones-secundarias/${q.id}` });
       }
     }
