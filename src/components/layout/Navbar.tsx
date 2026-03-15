@@ -73,7 +73,6 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
           width: expanded ? '200px' : '60px',
           background: '#16213e',
           borderRight: '1px solid #2a2a4a',
-          minHeight: '100vh',
           flexShrink: 0,
         }}
       >
@@ -116,7 +115,7 @@ export function Navbar({ activeTab, onTabChange }: NavbarProps) {
         )}
 
         {/* Tabs */}
-        <nav className="flex-1 py-2">
+        <nav className="flex-1 min-h-0 overflow-y-auto py-2">
           {TABS.map((tab) => (
             <button
               key={tab.id}

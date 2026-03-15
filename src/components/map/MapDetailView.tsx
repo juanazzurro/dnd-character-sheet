@@ -1,12 +1,13 @@
 import { useState, useRef, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Download, Tag, Plus, Minus, RotateCcw, MapPin as MapPinIcon, X } from 'lucide-react';
+import { ArrowLeft, Download, Tag, Plus, Minus, RotateCcw, MapPin as MapPinIcon, X, Trash2 } from 'lucide-react';
 import { useMapStore } from '../../store/mapStore';
 import { useNpcStore } from '../../store/npcStore';
 import { useMainQuestStore, useSideQuestStore } from '../../store/questStore';
 import { exportMap } from '../../utils/mapImportExport';
 import { createDefaultMapPin } from '../../types/gameMap';
 import { PIN_TYPES } from '../../types/gameMap';
+import type { PinType } from '../../types/gameMap';
 import { MapImageUpload } from './MapImageUpload';
 import { MapPinMarker } from './MapPinMarker';
 import { MapPinPanel } from './MapPinPanel';
@@ -64,6 +65,7 @@ interface MapDetailViewInnerProps {
 function MapDetailViewInner({ map, npcSuggestions, questSuggestions }: MapDetailViewInnerProps) {
   const navigate = useNavigate();
   const updateMap = useMapStore((s) => s.updateMap);
+  const deleteMap = useMapStore((s) => s.deleteMap);
   const addPin = useMapStore((s) => s.addPin);
   const updatePin = useMapStore((s) => s.updatePin);
   const deletePin = useMapStore((s) => s.deletePin);
@@ -120,6 +122,9 @@ function MapDetailViewInner({ map, npcSuggestions, questSuggestions }: MapDetail
       const percentX = clamp((imgX / imageSize.width) * 100, 0, 100);
       const percentY = clamp((imgY / imageSize.height) * 100, 0, 100);
       const pin = createDefaultMapPin(percentX, percentY);
+      if (typeFilter !== 'Todos') {
+        pin.type = typeFilter as PinType;
+      }
       addPin(map.id, pin);
       setSelectedPinId(pin.id);
       setPlacingPin(false);
@@ -243,6 +248,18 @@ function MapDetailViewInner({ map, npcSuggestions, questSuggestions }: MapDetail
           >
             <Tag size={12} />
             Etiquetas
+          </button>
+          <button
+            onClick={() => {
+              if (window.confirm(`¿Eliminar "${map.name || 'Mapa sin nombre'}"? Esta acción no se puede deshacer.`)) {
+                deleteMap(map.id);
+                navigate('/mapa');
+              }
+            }}
+            className="text-xs flex items-center gap-1 px-2 py-1 rounded border border-dnd-red/50 text-dnd-red hover:bg-dnd-red/10 transition-colors"
+          >
+            <Trash2 size={12} />
+            Eliminar
           </button>
         </div>
       </div>

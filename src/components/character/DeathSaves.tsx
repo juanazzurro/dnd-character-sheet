@@ -9,15 +9,25 @@ export function DeathSaves() {
 
   function toggleSuccess(index: number) {
     if (!activeCharacter) return;
-    const next = [...activeCharacter.deathSaveSuccesses] as [boolean, boolean, boolean];
-    next[index] = !next[index];
+    const current = activeCharacter.deathSaveSuccesses[index];
+    const next: [boolean, boolean, boolean] = [false, false, false];
+    if (current) {
+      for (let i = 0; i < index; i++) next[i] = activeCharacter.deathSaveSuccesses[i];
+    } else {
+      for (let i = 0; i <= index; i++) next[i] = true;
+    }
     updateCharacter(activeCharacter.id, { deathSaveSuccesses: next });
   }
 
   function toggleFailure(index: number) {
     if (!activeCharacter) return;
-    const next = [...activeCharacter.deathSaveFailures] as [boolean, boolean, boolean];
-    next[index] = !next[index];
+    const current = activeCharacter.deathSaveFailures[index];
+    const next: [boolean, boolean, boolean] = [false, false, false];
+    if (current) {
+      for (let i = 0; i < index; i++) next[i] = activeCharacter.deathSaveFailures[i];
+    } else {
+      for (let i = 0; i <= index; i++) next[i] = true;
+    }
     updateCharacter(activeCharacter.id, { deathSaveFailures: next });
   }
 
