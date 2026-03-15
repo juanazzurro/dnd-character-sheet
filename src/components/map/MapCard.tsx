@@ -27,7 +27,7 @@ export function MapCard({ map }: MapCardProps) {
     >
       <button
         onClick={handleDelete}
-        className="absolute top-2 right-2 z-10 p-1 text-ink-muted hover:text-dnd-red transition-colors opacity-0 group-hover:opacity-100"
+        className="absolute top-2 right-2 z-10 p-1 text-ink-muted hover:text-dnd-red transition-colors"
         title="Eliminar mapa"
         type="button"
       >
