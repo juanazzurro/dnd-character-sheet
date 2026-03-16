@@ -26,6 +26,22 @@ export const PIN_STATUSES = [
 
 export type PinStatus = (typeof PIN_STATUSES)[number];
 
+export const PIN_TYPE_ICONS: Record<PinType, string> = {
+  'Ciudad':     '🏙️',
+  'Pueblo':     '🏘️',
+  'Aldea':      '🏡',
+  'Mazmorra':   '💀',
+  'Bosque':     '🌲',
+  'Montana':    '⛰️',
+  'Ruinas':     '🏚️',
+  'Taberna':    '🍺',
+  'Templo':     '⛪',
+  'Puerto':     '⚓',
+  'Castillo':   '🏰',
+  'Campamento': '⛺',
+  'Otro':       '📍',
+};
+
 export const PIN_STATUS_COLORS: Record<PinStatus, string> = {
   'Explorado': '#22c55e',
   'No explorado': '#3b82f6',
