@@ -1,6 +1,6 @@
 import { MapPin as MapPinIcon } from 'lucide-react';
 import type { MapPin } from '../../types/gameMap';
-import { PIN_STATUS_COLORS } from '../../types/gameMap';
+import { PIN_STATUS_COLORS, PIN_TYPE_ICONS } from '../../types/gameMap';
 
 interface MapPinMarkerProps {
   pin: MapPin;
@@ -33,10 +33,16 @@ export function MapPinMarker({ pin, isSelected, showLabel, onMouseDown, onClick 
       }}
     >
       <div
-        className={`cursor-pointer transition-all ${isSelected ? 'scale-125' : 'hover:scale-110'}`}
+        className={`relative cursor-pointer transition-all ${isSelected ? 'scale-125' : 'hover:scale-110'}`}
         style={isSelected ? { filter: `drop-shadow(0 0 6px #d4af37) drop-shadow(0 0 12px #d4af37)` } : undefined}
       >
         <MapPinIcon size={28} fill={color} color="#1a1a2e" strokeWidth={1.5} />
+        <span
+          className="absolute left-1/2 -translate-x-1/2 pointer-events-none select-none"
+          style={{ fontSize: '10px', lineHeight: 1, top: '3px' }}
+        >
+          {PIN_TYPE_ICONS[pin.type]}
+        </span>
       </div>
       {showLabel && pin.name && (
         <div

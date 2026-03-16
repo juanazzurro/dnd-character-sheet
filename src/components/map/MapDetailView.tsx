@@ -133,7 +133,7 @@ function MapDetailViewInner({ map, npcSuggestions, questSuggestions }: MapDetail
 
     setIsPanning(true);
     setPanStart({ x: e.clientX - translateX, y: e.clientY - translateY });
-  }, [placingPin, map.id, imageSize, translateX, translateY, scale, addPin]);
+  }, [placingPin, map.id, imageSize, translateX, translateY, scale, addPin, typeFilter]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     if (draggingPinId && imageSize) {
